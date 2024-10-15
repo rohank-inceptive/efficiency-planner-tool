@@ -8,9 +8,23 @@
 
 
 
-##Address
+## Address
 - Confirm property details
 - Please confirm if the property details are correct
 - Confirm property details are correct button
 - Edit property details
   - Replace Confirm property details with Save and next
+  
+## Requirements
+- Electric Car
+  - Ask user if they have or plan to purchase an electric car
+    - Radio
+      - Yes? Ask user if they have an EV Charger
+        - Radio
+          - Yes
+          - No
+      - No
+- Ask user if they have room in loft or roof
+  - Radio
+    - Yes
+    - No
