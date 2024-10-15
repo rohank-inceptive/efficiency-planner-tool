@@ -28,3 +28,45 @@
   - Radio
     - Yes
     - No
+
+## Options
+
+- Plans
+- Row
+  - col-6
+    - Low cost quick wins
+      - Checkbox input
+        - Window and door draft proofing
+          - Dummy value
+        - Low-energy light bulbs
+          - Dummy value
+      - Total in pound (update based on selection)
+  - col-6
+    - Budget-friendly energy efficiency solutions
+      - Checkbox input
+        - Loft insulation
+          - Dummy value
+        - Cavity Wall insulation
+          - Dummy value
+        - Ventilation
+          - Dummy value
+        - EV Charger
+          - Dummy value
+      - Total in pound (update based on selection)
+- Row
+- col-12
+  - Higher-cost longer term
+      - Checkbox input
+        - Solar
+          - Dummy value
+        - Solar + Battery
+          - Dummy value
+        - Air Source or Ground Source Heat Pump
+          - Dummy value
+        - New double glazing
+          - Dummy value
+        - External wall insulation
+          - Dummy value
+        - Internal wall insulation
+          - Dummy value
+      - Total in pound (update based on selection)
