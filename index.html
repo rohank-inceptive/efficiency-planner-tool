@@ -40,12 +40,6 @@
           href="../index.html"
           class="d-flex align-items-center h-3 text-success mb-3 mb-lg-0 me-lg-auto text-dark text-decoration-none"
         >
-          <img
-            src="../assets/image/logo-scis.webp"
-            width="100"
-            class="img d-none"
-            alt="scis-logo"
-          />
           Mimi & Marble Tech Limited
         </a>
       </div>
@@ -397,6 +391,28 @@
                         />
                       </div>
                     </div>
+                    <div class="row my-4 g-3">
+                      <div class="col-md-8"></div>
+                      <div class="col-md-4 text-end">
+                        <button
+                          type="button"
+                          class="btn btn-primary"
+                          id="validateAddressModal"
+                          data-bs-toggle="modal"
+                          data-bs-target="#validationModal"
+                        >
+                          Confirm Property Details
+                        </button>
+                        <button
+                          type="button"
+                          class="btn btn-success"
+                          id="saveAddress"
+                          style="display: none;"
+                        >
+                          Save and Next
+                        </button>
+                      </div>
+                    </div>
                   </form>
                 </div>
               </div>
@@ -429,6 +445,50 @@
       </div>
     </div>
 
+    <!-- Address Validation Modal Structure -->
+    <div
+      class="modal fade"
+      id="validationModal"
+      tabindex="-1"
+      aria-labelledby="validationModalLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="validationModalLabel">
+              Validate Property Details
+            </h5>
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="modal"
+              aria-label="Close"
+            ></button>
+          </div>
+          <div class="modal-body">
+            <p>Please confirm if the property details are correct.</p>
+          </div>
+          <div class="modal-footer">
+            <button
+              type="button"
+              class="btn btn-success"
+              id="confirmAddressValidation"
+            >
+              Confirm property details are correct
+            </button>
+            <button
+              type="button"
+              class="btn btn-warning"
+              id="updateAddressValidation"
+            >
+              Edit Property Details
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <!-- Bootstrap JS -->
     <script src="../assets/libs/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
 
@@ -446,13 +506,41 @@
           "33, Langham Gardens, Wembley, HA0 3RG",
           "221B Baker Street, Marylebone, London NW1 6XE",
         ];
+
         $("#smartwizard").smartWizard({
+          selected: 0,
           theme: "arrows",
-          themePrefixCss: "sw-theme-",
           transition: {
             animation: "fade",
           },
         });
+
+        /* Disable step 2 and 3 until step 1 is validated */
+        $("#smartwizard").smartWizard("stepState", [1, 2], "disable");
+        $(".sw-btn-next").prop("disabled", true);
+
+        $("#confirmAddressValidation").on("click", function (e) {
+          e.preventDefault();
+          $(".sw-btn-next").prop("disabled", false);
+          $("#smartwizard").smartWizard("stepState", [0], "done");
+          $("#smartwizard").smartWizard("unsetState", [1], "disable");
+          $("#validateAddressModal").toggle("d-none");
+          $("#validationModal").modal("hide");
+        });
+
+        $("#updateAddressValidation").on("click", function (e) {
+          $("#epc_verification_form input").prop("disabled", false);
+          $("#epc_verification_form select").prop("disabled", false);
+          $("#validateAddressModal").toggle("d-none");
+          $("#saveAddress").toggle("d-none");
+          $("#validationModal").modal("hide");
+        });
+
+        $("#saveAddress").on("click", function (e) {
+          $("#smartwizard").smartWizard("next");
+        });
+
+        /* Postcode search */
         $("#search_postcode_form").on("submit", function (e) {
           e.preventDefault();
           $("#epc_verification_form").toggleClass("d-none");
@@ -460,18 +548,16 @@
           $("#smartwizard").smartWizard("fixHeight");
         });
 
+        /* Dummy suggestion search input */
         $("#postalCode").on("input", function () {
           const input = $(this).val();
           const suggestionsContainer = $("#suggestionsContainer");
 
-          // Clear previous suggestions
           suggestionsContainer.empty();
 
-          // Check if input is not empty
           if (input) {
             suggestionsContainer.show();
 
-            // Append each dummy address as a suggestion
             dummyAddresses.forEach((address) => {
               const suggestionItem = $(
                 '<div class="suggestion-item"></div>'
@@ -491,7 +577,6 @@
           $("#suggestionsContainer").hide();
         }
 
-        // Close suggestions if user clicks outside
         $(document).on("click", function (event) {
           if (!$(event.target).closest("#postalCode").length) {
             $("#suggestionsContainer").hide();

@@ -8,19 +8,9 @@
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-POC UI
-1. Wizard-style Step-by-step Form with Progress Indicator
-2. Vertical Stepper UI with Next Button Disabled
-3. Card-based UI with Sequential Card Unlocking
-4. Tab-based Navigation with Disabled Tabs
+##Address
+- Confirm property details
+- Please confirm if the property details are correct
+- Confirm property details are correct button
+- Edit property details
+  - Replace Confirm property details with Save and next
