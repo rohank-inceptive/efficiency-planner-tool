@@ -688,19 +688,20 @@
                               data-carbon-saving="8"
                               data-value-added="20"
                             />
-                            <label class="form-check-label" for="lowEnergyBulbs">
+                            <label
+                              class="form-check-label"
+                              for="lowEnergyBulbs"
+                            >
                               Low-energy Light Bulbs (£10)
                             </label>
                           </div>
                         </form>
                       </div>
                       <div class="card-footer">
-                        <p class="">
-                          Total: £<span id="lowCostTotal">0</span>
-                        </p>
+                        <p class="">Total: £<span id="lowCostTotal">0</span></p>
                       </div>
                     </div>
-                  
+
                     <!-- Card 2: Budget-Friendly Energy Efficiency Solutions -->
                     <div class="card m-2" id="budget-friendly-form-card">
                       <div class="card-header">
@@ -718,7 +719,10 @@
                               data-carbon-saving="25"
                               data-value-added="500"
                             />
-                            <label class="form-check-label" for="loftInsulation">
+                            <label
+                              class="form-check-label"
+                              for="loftInsulation"
+                            >
                               Loft Insulation (£100)
                             </label>
                           </div>
@@ -732,7 +736,10 @@
                               data-carbon-saving="30"
                               data-value-added="600"
                             />
-                            <label class="form-check-label" for="cavityWallInsulation">
+                            <label
+                              class="form-check-label"
+                              for="cavityWallInsulation"
+                            >
                               Cavity Wall Insulation (£120)
                             </label>
                           </div>
@@ -772,10 +779,12 @@
                         </p>
                       </div>
                     </div>
-                  
+
                     <!-- Card 3: Higher-Cost Longer-Term Solutions -->
                     <div class="card m-2" id="higher-cost-form-card">
-                      <div class="card-header">Higher-Cost Longer-Term Solutions</div>
+                      <div class="card-header">
+                        Higher-Cost Longer-Term Solutions
+                      </div>
                       <div class="card-body">
                         <form id="higher-cost-form">
                           <div class="form-check">
@@ -844,7 +853,10 @@
                               data-carbon-saving="250"
                               data-value-added="6000"
                             />
-                            <label class="form-check-label" for="externalWallInsulation">
+                            <label
+                              class="form-check-label"
+                              for="externalWallInsulation"
+                            >
                               External Wall Insulation (£5000)
                             </label>
                           </div>
@@ -858,7 +870,10 @@
                               data-carbon-saving="200"
                               data-value-added="5000"
                             />
-                            <label class="form-check-label" for="internalWallInsulation">
+                            <label
+                              class="form-check-label"
+                              for="internalWallInsulation"
+                            >
                               Internal Wall Insulation (£4000)
                             </label>
                           </div>
@@ -871,38 +886,49 @@
                       </div>
                     </div>
                   </div>
-                  
+
                   <div class="row my-2">
                     <div>
-                      <h3>Summary</h5>
+                      <h3>Summary</h3>
                     </div>
-                    <div class="col-md-6">
-                          <div class="d-flex justify-content-between">
-                            <h6>Total from Package</h6>
-                            <span>£<span id="totalFromPackage">0</span></span>
-                          </div>
-                          <div class="d-flex justify-content-between">
-                            <h6>Discount</h6>
-                            <span>£<span id="discountAmount">0</span></span>
-                          </div>
-                          <div class="d-flex justify-content-between">
-                            <h5>Final Total</h5>
-                            <span>£<span id="finalTotal">0</span></span>
-                          </div>
+                    <div class="col-md-5">
+                      <div class="d-flex justify-content-between">
+                        <h6>Total from Package</h6>
+                        <span>£<span id="totalFromPackage">0</span></span>
+                      </div>
+                      <div class="d-flex justify-content-between">
+                        <h6>Discount</h6>
+                        <span>£<span id="discountAmount">0</span></span>
+                      </div>
+                      <div class="d-flex justify-content-between">
+                        <h5>Final Total</h5>
+                        <span>£<span id="finalTotal">0</span></span>
+                      </div>
                     </div>
-                    <div class="col-md-6">
+                    <div class="col-md-5">
                       <div class="d-flex justify-content-between">
                         <h6>Monthly Bill Saving</h6>
                         <span>£<span id="totalBillSaving">0</span></span>
                       </div>
                       <div class="d-flex justify-content-between">
                         <h6>Carbon Emission Saving</h6>
-                        <span><span id="totalCarbonSaving">0</span> Kg/Year</span>
+                        <span
+                          ><span id="totalCarbonSaving">0</span> Kg/Year</span
+                        >
                       </div>
                       <div class="d-flex justify-content-between">
                         <h5>Value Added to Property</h5>
                         <span>£<span id="totalPropertyValue">0</span></span>
                       </div>
+                    </div>
+                    <div class="col-md-2">
+                      <h6>EPC Rating</h6>
+                      <h2
+                        class="border border-3 border-success rounded-circle text-center w-50"
+                        id="epcRating"
+                      >
+                        E
+                      </h3>
                     </div>
                   </div>
                 </div>
@@ -1121,11 +1147,11 @@
             $("#options").find(".card").css("border", "");
           }
 
-          if(currentFormName == "low-cost-form"){
+          if (currentFormName == "low-cost-form") {
             updateTotal("low-cost-form", "lowCostTotal");
-          }else if(currentFormName == "budget-friendly-form"){
+          } else if (currentFormName == "budget-friendly-form") {
             updateTotal("budget-friendly-form", "budgetFriendlyTotal");
-          }else{
+          } else {
             updateTotal("higher-cost-form", "higherCostTotal");
           }
         });
@@ -1193,13 +1219,25 @@
         let billSaving = 0;
         let carbonSaving = 0;
         let propertyValue = 0;
+        let epcRating = "E";
 
         $(`#${formId} input[type="checkbox"]`).each(function () {
           if ($(this).is(":checked")) {
             total += parseInt($(this).val());
-            billSaving += parseInt($(this).data('bill-saving'));
-            carbonSaving += parseInt($(this).data('carbon-saving'));
-            propertyValue += parseInt($(this).data('value-added'));
+            billSaving += parseInt($(this).data("bill-saving"));
+            carbonSaving += parseInt($(this).data("carbon-saving"));
+            propertyValue += parseInt($(this).data("value-added"));
+            if (carbonSaving >= 1000) {
+              epcRating = "A";
+            } else if (carbonSaving >= 500) {
+              epcRating = "B";
+            } else if (carbonSaving >= 100) {
+              epcRating = "C";
+            } else if (carbonSaving > 10) {
+              epcRating = "D";
+            } else {
+              epcRating = "E";
+            }
           }
         });
 
@@ -1213,6 +1251,7 @@
         $("#totalBillSaving").text(billSaving);
         $("#totalCarbonSaving").text(carbonSaving);
         $("#totalPropertyValue").text(propertyValue);
+        $("#epcRating").text(epcRating);
         $(`#${totalId}`).text(total);
       }
     </script>
