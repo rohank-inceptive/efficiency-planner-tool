@@ -7,6 +7,14 @@
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="../assets/css/bootstrap.min.css" />
 
+    <!-- Fontawesome -->
+    <link
+      rel="stylesheet"
+      href="./assets/fontawesome/css/fontawesome.min.css"
+    />
+    <link rel="stylesheet" href="./assets/fontawesome/css/brands.min.css" />
+    <link rel="stylesheet" href="./assets/fontawesome/css/solid.min.css" />
+
     <!-- SmartWizard CSS -->
     <link
       rel="stylesheet"
@@ -41,17 +49,6 @@
         padding-left: 3rem;
         display: grid;
       }
-      /* .column:hover {
-        padding-left: 0;
-      }
-      .column:hover .card .txt {
-        margin-left: 1rem;
-      } */
-      .column:hover .card .txt h3,
-      .column:hover .card .txt p {
-        color: white;
-        opacity: 1;
-      }
 
       .card {
         min-height: 170px;
@@ -65,17 +62,108 @@
         box-shadow: 0 0 21px rgba(0, 0, 0, 0.27);
       }
 
+      .card-body {
+        z-index: 999;
+      }
+
       .card.active {
         box-shadow: 0 0 21px rgba(196, 6, 6, 0.651);
       }
       .card .txt {
-        /* margin-left: -3rem; */
         z-index: 1;
       }
       .card .txt h3 {
         font-size: 1.5rem;
         font-weight: 300;
         text-transform: uppercase;
+      }
+      .card .ico-card {
+        position: absolute;
+        top: 0;
+        left: 0;
+        bottom: 0;
+        right: 0;
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+        z-index: 0;
+      }
+
+      .card i {
+        position: relative;
+        right: -55%;
+        top: 85%;
+        font-size: 9rem;
+        line-height: 0;
+        opacity: 0.2;
+        color: white;
+        z-index: 0;
+      }
+
+      .card-footer {
+        color: unset;
+        border: unset;
+        background-color: unset;
+      }
+
+      /* Checkbox */
+
+      input[type="checkbox"] {
+        -webkit-appearance: none;
+        -moz-appearance: none;
+        appearance: none;
+        background-color: var(--form-background);
+        margin: 0;
+        font: inherit;
+        color: currentColor;
+        width: 1.15em;
+        height: 1.15em;
+        border: 0.15em solid currentColor;
+        border-radius: 0.15em;
+        transform: translateY(-0.075em);
+        display: grid;
+        place-content: center;
+      }
+
+      input[type="checkbox"]::before {
+        content: "";
+        width: 0.65em;
+        height: 0.65em;
+        -webkit-clip-path: polygon(
+          14% 44%,
+          0 65%,
+          50% 100%,
+          100% 16%,
+          80% 0%,
+          43% 62%
+        );
+        clip-path: polygon(14% 44%, 0 65%, 50% 100%, 100% 16%, 80% 0%, 43% 62%);
+        transform: scale(0);
+        transform-origin: bottom left;
+        transition: 120ms transform ease-in-out;
+        box-shadow: inset 1em 1em var(--form-control-color);
+        background-color: CanvasText;
+      }
+
+      input[type="checkbox"]:checked {
+        background-color: unset;
+        box-shadow: unset;
+        border-color: unset;
+      }
+
+      input[type="checkbox"]:checked::before {
+        transform: scale(1.2);
+      }
+
+      input[type="checkbox"]:focus {
+        outline: max(2px, 0.15em) solid currentColor;
+        outline-offset: max(2px, 0.15em);
+      }
+
+      input[type="checkbox"]:disabled {
+        --form-control-color: var(--form-control-disabled);
+        color: var(--form-control-disabled);
+        cursor: not-allowed;
       }
     </style>
   </head>
@@ -144,6 +232,9 @@
                           Total: £<span id="lowCostTotal">0</span>
                         </p>
                       </div>
+                      <div class="ico-card">
+                        <i class="fa-solid fa-house"></i>
+                      </div>
                     </div>
                   </div>
                   <!-- Card 2: Budget-Friendly Energy Efficiency Solutions -->
@@ -210,6 +301,9 @@
                         <p class="mt-3">
                           Total: £<span id="budgetFriendlyTotal">0</span>
                         </p>
+                      </div>
+                      <div class="ico-card">
+                        <i class="fa-solid fa-house-chimney-window"></i>
                       </div>
                     </div>
                   </div>
@@ -300,6 +394,9 @@
                           Total: £<span id="higherCostTotal">0</span>
                         </p>
                       </div>
+                      <div class="ico-card">
+                        <i class="fa-solid fa-house-circle-check"></i>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -325,7 +422,6 @@
         $('#options input[type="checkbox"]').on("change", function () {
           const currentForm = $(this).closest("form");
           const currentFormName = currentForm.attr("id");
-          console.log(currentFormName);
           if (currentPackageOption != currentFormName) {
             currentPackageOption = currentFormName;
             $("#options form")
@@ -335,6 +431,23 @@
               });
             $("#options").find(".card").removeClass("active");
             $("#" + currentFormName + "-card").addClass("active");
+          }
+
+          if (currentPackageOption == "higher-cost-form") {
+            const solar = $("#solar");
+            const solarBattery = $("#solarBattery");
+            if (solarBattery.is(":checked")) {
+              solar.prop("checked", false);
+              solar.prop("disabled", true);
+            } else {
+              solar.prop("disabled", false);
+            }
+          }
+          const form = $("#" + currentPackageOption);
+          const allCheckboxes = form.find('input[type="checkbox"]');
+          if (allCheckboxes.filter(":checked").length === 0) {
+            $("#options").find(".card").removeClass("active");
+            currentPackageOption = "";
           }
           updateTotal("low-cost-form", "lowCostTotal");
           updateTotal("budget-friendly-form", "budgetFriendlyTotal");

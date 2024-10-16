@@ -32,6 +32,18 @@
 ## Options
 
 - Plans
+
+- forms
+  - checkbox
+    - If form has checkbox checked
+      - Add UI (border/shadow) to indicate selected package
+      - Remove selected package indicator on any other form (deselect other packages, ensuring only one package is highlighted at a time)
+    - If form has checkbox unchecked
+      - If no checkboxes are checked in selected package
+        - Remove selected package indicator on current form (deselect the package)
+      - Else
+        - Keep the package indicator, as it is still considered selected.
+
 - Row
   - col-6
     - Low cost quick wins
@@ -70,3 +82,15 @@
         - Internal wall insulation
           - Dummy value
       - Total in pound (update based on selection)
+
+- Higher-cost longer term
+  - Checkbox input
+    - Solar input
+      - Uncheck and disable if solarBattery input is checked
+      - Enable if solarBattery input is unchecked
+    - solarBattery input
+
+- Total after package selection
+  - Total from package
+    - Deduct discount
+      - Show final Total

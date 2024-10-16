@@ -83,6 +83,36 @@
       .column:hover a:after {
         width: 10%;
       }
+
+      .packages-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        /* grid-template-rows: repeat(2, 1fr); */
+      }
+      #low-cost-form-card {
+        grid-area: 1 / 1 / 2 / 2;
+      }
+      #budget-friendly-form-card {
+        grid-area: 1 / 2 / 2 / 3;
+      }
+      #higher-cost-form-card {
+        grid-area: 2 / 1 / 3 / 3;
+      }
+      @media only screen and (max-width: 768px) {
+        .packages-grid {
+          grid-template-columns: 1fr;
+          grid-template-rows: repeat(3, 1fr);
+        }
+        #low-cost-form-card {
+          grid-area: 1 / 1 / 2 / 2;
+        }
+        #budget-friendly-form-card {
+          grid-area: 2 / 1 / 3 / 2;
+        }
+        #higher-cost-form-card {
+          grid-area: 3 / 1 / 4 / 2;
+        }
+      }
     </style>
   </head>
 
@@ -446,6 +476,7 @@
                           id="aerialImage"
                           accept="image/*"
                           onchange="previewImage(event, 'aerialPreviewImg')"
+                          disabled
                         />
                         <!-- Aerial View Image Preview -->
                         <div class="image-preview mt-3" id="aerialPreview">
@@ -472,6 +503,7 @@
                           id="streetImage"
                           accept="image/*"
                           onchange="previewImage(event,'streetPreviewImg')"
+                          disabled
                         />
                         <!-- Image Preview -->
                         <div class="image-preview mt-3" id="streetPreview">
@@ -626,206 +658,250 @@
               >
                 <div class="row">
                   <h1 class="text-center">Energy Efficiency Plans</h1>
-                  <div class="row my-4">
+                  <div class="packages-grid">
                     <!-- Card 1: Low Cost Quick Wins -->
-                    <div class="col-md-8 col-xl-6 mb-4">
-                      <div class="card" id="low-cost-form-card">
-                        <div class="card-header">Low Cost Quick Wins</div>
-                        <div class="card-body">
-                          <form id="low-cost-form">
-                            <div class="form-check">
-                              <input
-                                class="form-check-input"
-                                type="checkbox"
-                                value="30"
-                                id="draftProofing"
-                              />
-                              <label
-                                class="form-check-label"
-                                for="draftProofing"
-                              >
-                                Window and Door Draft Proofing (£30)
-                              </label>
-                            </div>
-                            <div class="form-check">
-                              <input
-                                class="form-check-input"
-                                type="checkbox"
-                                value="10"
-                                id="lowEnergyBulbs"
-                              />
-                              <label
-                                class="form-check-label"
-                                for="lowEnergyBulbs"
-                              >
-                                Low-energy Light Bulbs (£10)
-                              </label>
-                            </div>
-                            <p class="mt-3">
-                              Total: £<span id="lowCostTotal">0</span>
-                            </p>
-                          </form>
-                        </div>
+                    <div class="card m-2" id="low-cost-form-card">
+                      <div class="card-header">Low Cost Quick Wins</div>
+                      <div class="card-body">
+                        <form id="low-cost-form">
+                          <div class="form-check">
+                            <input
+                              class="form-check-input"
+                              type="checkbox"
+                              value="30"
+                              id="draftProofing"
+                              data-bill-saving="5"
+                              data-carbon-saving="10"
+                              data-value-added="100"
+                            />
+                            <label class="form-check-label" for="draftProofing">
+                              Window and Door Draft Proofing (£30)
+                            </label>
+                          </div>
+                          <div class="form-check">
+                            <input
+                              class="form-check-input"
+                              type="checkbox"
+                              value="10"
+                              id="lowEnergyBulbs"
+                              data-bill-saving="2"
+                              data-carbon-saving="8"
+                              data-value-added="20"
+                            />
+                            <label class="form-check-label" for="lowEnergyBulbs">
+                              Low-energy Light Bulbs (£10)
+                            </label>
+                          </div>
+                        </form>
+                      </div>
+                      <div class="card-footer">
+                        <p class="">
+                          Total: £<span id="lowCostTotal">0</span>
+                        </p>
                       </div>
                     </div>
-
+                  
                     <!-- Card 2: Budget-Friendly Energy Efficiency Solutions -->
-                    <div class="col-md-8 col-xl-6 mb-4">
-                      <div class="card" id="budget-friendly-form-card">
-                        <div class="card-header">
-                          Budget-Friendly Energy Efficiency Solutions
-                        </div>
-                        <div class="card-body">
-                          <form id="budget-friendly-form">
-                            <div class="form-check">
-                              <input
-                                class="form-check-input"
-                                type="checkbox"
-                                value="100"
-                                id="loftInsulation"
-                              />
-                              <label
-                                class="form-check-label"
-                                for="loftInsulation"
-                              >
-                                Loft Insulation (£100)
-                              </label>
-                            </div>
-                            <div class="form-check">
-                              <input
-                                class="form-check-input"
-                                type="checkbox"
-                                value="120"
-                                id="cavityWallInsulation"
-                              />
-                              <label
-                                class="form-check-label"
-                                for="cavityWallInsulation"
-                              >
-                                Cavity Wall Insulation (£120)
-                              </label>
-                            </div>
-                            <div class="form-check">
-                              <input
-                                class="form-check-input"
-                                type="checkbox"
-                                value="50"
-                                id="ventilation"
-                              />
-                              <label class="form-check-label" for="ventilation">
-                                Ventilation (£50)
-                              </label>
-                            </div>
-                            <div class="form-check">
-                              <input
-                                class="form-check-input"
-                                type="checkbox"
-                                value="300"
-                                id="evCharger"
-                              />
-                              <label class="form-check-label" for="evCharger">
-                                EV Charger (£300)
-                              </label>
-                            </div>
-                            <p class="mt-3">
-                              Total: £<span id="budgetFriendlyTotal">0</span>
-                            </p>
-                          </form>
-                        </div>
+                    <div class="card m-2" id="budget-friendly-form-card">
+                      <div class="card-header">
+                        Budget-Friendly Energy Efficiency Solutions
+                      </div>
+                      <div class="card-body">
+                        <form id="budget-friendly-form">
+                          <div class="form-check">
+                            <input
+                              class="form-check-input"
+                              type="checkbox"
+                              value="100"
+                              id="loftInsulation"
+                              data-bill-saving="15"
+                              data-carbon-saving="25"
+                              data-value-added="500"
+                            />
+                            <label class="form-check-label" for="loftInsulation">
+                              Loft Insulation (£100)
+                            </label>
+                          </div>
+                          <div class="form-check">
+                            <input
+                              class="form-check-input"
+                              type="checkbox"
+                              value="120"
+                              id="cavityWallInsulation"
+                              data-bill-saving="20"
+                              data-carbon-saving="30"
+                              data-value-added="600"
+                            />
+                            <label class="form-check-label" for="cavityWallInsulation">
+                              Cavity Wall Insulation (£120)
+                            </label>
+                          </div>
+                          <div class="form-check">
+                            <input
+                              class="form-check-input"
+                              type="checkbox"
+                              value="50"
+                              id="ventilation"
+                              data-bill-saving="8"
+                              data-carbon-saving="10"
+                              data-value-added="200"
+                            />
+                            <label class="form-check-label" for="ventilation">
+                              Ventilation (£50)
+                            </label>
+                          </div>
+                          <div class="form-check">
+                            <input
+                              class="form-check-input"
+                              type="checkbox"
+                              value="300"
+                              id="evCharger"
+                              data-bill-saving="25"
+                              data-carbon-saving="50"
+                              data-value-added="1000"
+                            />
+                            <label class="form-check-label" for="evCharger">
+                              EV Charger (£300)
+                            </label>
+                          </div>
+                        </form>
+                      </div>
+                      <div class="card-footer">
+                        <p class="">
+                          Total: £<span id="budgetFriendlyTotal">0</span>
+                        </p>
                       </div>
                     </div>
-
+                  
                     <!-- Card 3: Higher-Cost Longer-Term Solutions -->
-                    <div class="col-md-8 col-xl-12 mb-4">
-                      <div class="card" id="higher-cost-form-card">
-                        <div class="card-header">
-                          Higher-Cost Longer-Term Solutions
-                        </div>
-                        <div class="card-body">
-                          <form id="higher-cost-form">
-                            <div class="form-check">
-                              <input
-                                class="form-check-input"
-                                type="checkbox"
-                                value="4000"
-                                id="solar"
-                              />
-                              <label class="form-check-label" for="solar">
-                                Solar (£4000)
-                              </label>
-                            </div>
-                            <div class="form-check">
-                              <input
-                                class="form-check-input"
-                                type="checkbox"
-                                value="6000"
-                                id="solarBattery"
-                              />
-                              <label
-                                class="form-check-label"
-                                for="solarBattery"
-                              >
-                                Solar + Battery (£6000)
-                              </label>
-                            </div>
-                            <div class="form-check">
-                              <input
-                                class="form-check-input"
-                                type="checkbox"
-                                value="8000"
-                                id="heatPump"
-                              />
-                              <label class="form-check-label" for="heatPump">
-                                Air Source or Ground Source Heat Pump (£8000)
-                              </label>
-                            </div>
-                            <div class="form-check">
-                              <input
-                                class="form-check-input"
-                                type="checkbox"
-                                value="3000"
-                                id="doubleGlazing"
-                              />
-                              <label
-                                class="form-check-label"
-                                for="doubleGlazing"
-                              >
-                                New Double Glazing (£3000)
-                              </label>
-                            </div>
-                            <div class="form-check">
-                              <input
-                                class="form-check-input"
-                                type="checkbox"
-                                value="5000"
-                                id="externalWallInsulation"
-                              />
-                              <label
-                                class="form-check-label"
-                                for="externalWallInsulation"
-                              >
-                                External Wall Insulation (£5000)
-                              </label>
-                            </div>
-                            <div class="form-check">
-                              <input
-                                class="form-check-input"
-                                type="checkbox"
-                                value="4000"
-                                id="internalWallInsulation"
-                              />
-                              <label
-                                class="form-check-label"
-                                for="internalWallInsulation"
-                              >
-                                Internal Wall Insulation (£4000)
-                              </label>
-                            </div>
-                            <p class="mt-3">
-                              Total: £<span id="higherCostTotal">0</span>
-                            </p>
-                          </form>
-                        </div>
+                    <div class="card m-2" id="higher-cost-form-card">
+                      <div class="card-header">Higher-Cost Longer-Term Solutions</div>
+                      <div class="card-body">
+                        <form id="higher-cost-form">
+                          <div class="form-check">
+                            <input
+                              class="form-check-input"
+                              type="checkbox"
+                              value="4000"
+                              id="solar"
+                              data-bill-saving="100"
+                              data-carbon-saving="200"
+                              data-value-added="5000"
+                            />
+                            <label class="form-check-label" for="solar">
+                              Solar (£4000)
+                            </label>
+                          </div>
+                          <div class="form-check">
+                            <input
+                              class="form-check-input"
+                              type="checkbox"
+                              value="6000"
+                              id="solarBattery"
+                              data-bill-saving="150"
+                              data-carbon-saving="300"
+                              data-value-added="7000"
+                            />
+                            <label class="form-check-label" for="solarBattery">
+                              Solar + Battery (£6000)
+                            </label>
+                          </div>
+                          <div class="form-check">
+                            <input
+                              class="form-check-input"
+                              type="checkbox"
+                              value="8000"
+                              id="heatPump"
+                              data-bill-saving="200"
+                              data-carbon-saving="400"
+                              data-value-added="10000"
+                            />
+                            <label class="form-check-label" for="heatPump">
+                              Air Source or Ground Source Heat Pump (£8000)
+                            </label>
+                          </div>
+                          <div class="form-check">
+                            <input
+                              class="form-check-input"
+                              type="checkbox"
+                              value="3000"
+                              id="doubleGlazing"
+                              data-bill-saving="75"
+                              data-carbon-saving="100"
+                              data-value-added="4000"
+                            />
+                            <label class="form-check-label" for="doubleGlazing">
+                              New Double Glazing (£3000)
+                            </label>
+                          </div>
+                          <div class="form-check">
+                            <input
+                              class="form-check-input"
+                              type="checkbox"
+                              value="5000"
+                              id="externalWallInsulation"
+                              data-bill-saving="120"
+                              data-carbon-saving="250"
+                              data-value-added="6000"
+                            />
+                            <label class="form-check-label" for="externalWallInsulation">
+                              External Wall Insulation (£5000)
+                            </label>
+                          </div>
+                          <div class="form-check">
+                            <input
+                              class="form-check-input"
+                              type="checkbox"
+                              value="4000"
+                              id="internalWallInsulation"
+                              data-bill-saving="110"
+                              data-carbon-saving="200"
+                              data-value-added="5000"
+                            />
+                            <label class="form-check-label" for="internalWallInsulation">
+                              Internal Wall Insulation (£4000)
+                            </label>
+                          </div>
+                        </form>
+                      </div>
+                      <div class="card-footer">
+                        <p class="">
+                          Total: £<span id="higherCostTotal">0</span>
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                  
+                  <div class="row my-2">
+                    <div>
+                      <h5>Summary</h5>
+                    </div>
+                    <div class="col-md-4">
+                          <div class="d-flex justify-content-between">
+                            <h6>Total from Package</h6>
+                            <span>£<span id="totalFromPackage">0</span></span>
+                          </div>
+                          <div class="d-flex justify-content-between">
+                            <h6>Discount</h6>
+                            <span>£<span id="discountAmount">0</span></span>
+                          </div>
+                          <div class="d-flex justify-content-between">
+                            <h5>Final Total</h5>
+                            <span>£<span id="finalTotal">0</span></span>
+                          </div>
+                    </div>
+                    <div class="col-md-4">
+                      <div class="d-flex justify-content-between">
+                        <h6>Monthly Bill Saving</h6>
+                        <span>£<span id="totalBillSaving">0</span></span>
+                      </div>
+                      <div class="d-flex justify-content-between">
+                        <h6>Carbon Emission Saving</h6>
+                        <span><span id="totalCarbonSaving">0</span> Kg/Year</span>
+                      </div>
+                      <div class="d-flex justify-content-between">
+                        <h5>Value Added to Property</h5>
+                        <span>£<span id="totalPropertyValue">0</span></p>
                       </div>
                     </div>
                   </div>
@@ -1022,11 +1098,36 @@
                 $(this).find('input[type="checkbox"]').prop("checked", false);
               });
             $("#options").find(".card").css("border", "");
+            $("#solar").prop("disabled", false);
             $("#" + currentFormName + "-card").css("border", "2px solid red");
           }
-          updateTotal("low-cost-form", "lowCostTotal");
-          updateTotal("budget-friendly-form", "budgetFriendlyTotal");
-          updateTotal("higher-cost-form", "higherCostTotal");
+
+          // Solar and solar battery checkbox
+          if (currentPackageOption == "higher-cost-form") {
+            const solar = $("#solar");
+            const solarBattery = $("#solarBattery");
+            if (solarBattery.is(":checked")) {
+              solar.prop("checked", false);
+              solar.prop("disabled", true);
+            } else {
+              solar.prop("disabled", false);
+            }
+          }
+
+          const form = $("#" + currentPackageOption);
+          const allCheckboxes = form.find('input[type="checkbox"]');
+          if (allCheckboxes.filter(":checked").length === 0) {
+            currentPackageOption = "";
+            $("#options").find(".card").css("border", "");
+          }
+
+          if(currentFormName == "low-cost-form"){
+            updateTotal("low-cost-form", "lowCostTotal");
+          }else if(currentFormName == "budget-friendly-form"){
+            updateTotal("budget-friendly-form", "budgetFriendlyTotal");
+          }else{
+            updateTotal("higher-cost-form", "higherCostTotal");
+          }
         });
       });
 
@@ -1086,13 +1187,32 @@
 
       function updateTotal(formId, totalId) {
         let total = 0;
+        let discountPercent = 0.1;
+        let discountValue = 0;
+        let finalTotal = 0;
+        let billSaving = 0;
+        let carbonSaving = 0;
+        let propertyValue = 0;
 
         $(`#${formId} input[type="checkbox"]`).each(function () {
           if ($(this).is(":checked")) {
             total += parseInt($(this).val());
+            billSaving += parseInt($(this).data('bill-saving'));
+            carbonSaving += parseInt($(this).data('carbon-saving'));
+            propertyValue += parseInt($(this).data('value-added'));
           }
         });
 
+        discountValue = total * discountPercent;
+
+        finalTotal = total - discountValue;
+
+        $("#totalFromPackage").text(total);
+        $("#discountAmount").text(discountValue);
+        $("#finalTotal").text(finalTotal);
+        $("#totalBillSaving").text(billSaving);
+        $("#totalCarbonSaving").text(carbonSaving);
+        $("#totalPropertyValue").text(propertyValue);
         $(`#${totalId}`).text(total);
       }
     </script>
