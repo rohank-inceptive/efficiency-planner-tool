@@ -9,7 +9,7 @@ $(document).ready(function () {
   let isAddressSelected = false;
   let currentPackageOption = "";
 
-  /* -------- COMMON FUNCTION ------- */
+  /* -------- COMMON JS ------- */
   $("#smartwizard").smartWizard({
     selected: 0,
     theme: "arrows",
@@ -31,10 +31,10 @@ $(document).ready(function () {
       if (stepIndex == 0 && isAddressValid) {
         updateWizardState(true, 0);
       } else {
-        $(".sw-btn-next").prop("disabled", true);
+        setButtonState($(".sw-btn-next"), false);
       }
       if (stepIndex === 0 && isAddressSelected) {
-        $(".sw-btn-prev").removeClass("disabled").removeAttr("disabled");
+        setButtonState($(".sw-btn-prev"), true);
       }
     }
   );
@@ -44,9 +44,7 @@ $(document).ready(function () {
   $("#postalCode").on("input", function () {
     const input = $(this).val();
     const suggestionsContainer = $("#suggestionsContainer");
-
     suggestionsContainer.empty();
-
     if (input) {
       suggestionsContainer.show();
 
@@ -84,7 +82,6 @@ $(document).ready(function () {
   $("#search_postcode_form").on("submit", function (e) {
     e.preventDefault();
     isAddressSelected = true;
-
     var options = {
       toolbar: {
         showNextButton: true,
@@ -92,9 +89,10 @@ $(document).ready(function () {
       },
     };
     $("#smartwizard").smartWizard("setOptions", options);
-
-    $("#epc_verification_form").toggleClass("d-none");
-    $("#search_postcode_form").toggleClass("d-none");
+    toggleVisibility($("#epc_verification_form"), true);
+    toggleVisibility($("#search_postcode_form"), false);
+    setButtonState($("#smartwizard .sw-btn-prev"), true);
+    setButtonState($("#smartwizard .sw-btn-next"), false);
     $("#smartwizard .sw-btn-prev").prop("disabled", false);
     $("#smartwizard .sw-btn-next").prop("disabled", true);
     updateWizard();
@@ -105,9 +103,18 @@ $(document).ready(function () {
     let stepInfo = $("#smartwizard").smartWizard("getStepInfo");
     if (stepInfo.currentStep === 0) {
       isAddressSelected = false;
-      $("#epc_verification_form").toggleClass("d-none");
-      $("#search_postcode_form").toggleClass("d-none");
-      $(".sw-btn-prev").addClass("disabled").attr("disabled", true);
+      var options = {
+        toolbar: {
+          showNextButton: false,
+          showPreviousButton: false,
+        },
+      };
+      $("#smartwizard").smartWizard("setOptions", options);
+      toggleVisibility($("#validateAddressModal"), true);
+      toggleVisibility($("#saveAddress"), false);
+      toggleVisibility($("#epc_verification_form"), false);
+      toggleVisibility($("#search_postcode_form"), true);
+      setButtonState($("#smartwizard .sw-btn-prev"), false);
       updateWizard();
     }
   });
@@ -116,10 +123,9 @@ $(document).ready(function () {
   $("#confirmAddressValidation").on("click", function (e) {
     e.preventDefault();
     isAddressValid = true;
-    $(".sw-btn-next").prop("disabled", false);
-    $("#smartwizard").smartWizard("stepState", [0], "done");
-    $("#smartwizard").smartWizard("unsetState", [1], "disable");
-    $("#validateAddressModal").toggle("d-none");
+    setButtonState($("#smartwizard .sw-btn-next"), true);
+    updateWizardState(true, 0);
+    toggleVisibility($("#validateAddressModal"), false);
     $("#validationModal").modal("hide");
   });
 
@@ -128,8 +134,8 @@ $(document).ready(function () {
     isAddressValid = true;
     $("#epc_verification_form input").prop("disabled", false);
     $("#epc_verification_form select").prop("disabled", false);
-    $("#validateAddressModal").toggle("d-none");
-    $("#saveAddress").toggle("d-none");
+    toggleVisibility($("#validateAddressModal"), false);
+    toggleVisibility($("#saveAddress"), true);
     $("#validationModal").modal("hide");
     updateWizard();
   });
@@ -142,15 +148,18 @@ $(document).ready(function () {
   });
 
   /* Requirement */
+  // Radio button visibility for electric car and ev charger input
   $('input[name="electricCar"]').change(function () {
     if ($("#electricCarYes").is(":checked")) {
-      $("#evChargerSection").removeClass("d-none");
+      toggleVisibility($("#evChargerSection"), true);
     } else {
-      $("#evChargerSection").addClass("d-none");
+      toggleVisibility($("#evChargerSection"), false);
       $('input[name="evCharger"]').prop("checked", false);
     }
     updateWizard();
   });
+
+  // Check for input to change state of wizard stepsf
   $('#requirementForm input[type="radio"]').on("change", function () {
     checkRequirementFormCompletion();
   });
@@ -166,10 +175,9 @@ $(document).ready(function () {
         .each(function () {
           $(this).find('input[type="checkbox"]').prop("checked", false);
         });
-      // $("#options").find(".card").css("border", "");
       $("#options").find(".card").removeClass("selected-package");
+
       $("#solar").prop("disabled", false);
-      // $("#" + currentFormName + "-card").css("border", "2px solid red");
       $("#" + currentFormName + "-card").addClass("selected-package");
     }
 
@@ -203,10 +211,66 @@ $(document).ready(function () {
   });
 });
 
+/* ------- COMMON FUNCTION ---- */
+// Update wizard height
 function updateWizard() {
   $("#smartwizard").smartWizard("fixHeight");
 }
 
+// Show or hide an element
+function toggleVisibility(element, show) {
+  if (show) {
+    element.removeClass("d-none").show();
+  } else {
+    element.addClass("d-none").hide();
+  }
+}
+
+// Enable or disable a button
+function setButtonState(button, isEnabled) {
+  button.prop("disabled", !isEnabled);
+  button.toggleClass("disabled", !isEnabled);
+}
+
+// Show or hide an element
+function toggleVisibility(element, show) {
+  if (show) {
+    element.removeClass("d-none").show();
+  } else {
+    element.addClass("d-none").hide();
+  }
+}
+
+// Update wizard state of steps based on current step
+function updateWizardState(nextStatus, currentStep) {
+  if (nextStatus) {
+    setButtonState($(".sw-btn-next"), true);
+    $("#smartwizard").smartWizard("stepState", [currentStep], "done");
+    $("#smartwizard").smartWizard("unsetState", [currentStep + 1], "disable");
+  } else {
+    setButtonState($(".sw-btn-next"), false);
+    $("#smartwizard").smartWizard("unsetState", [currentStep], "done");
+    $("#smartwizard").smartWizard("stepState", [currentStep + 1], "disable");
+  }
+}
+
+/* ----- ADDRESS STEP ----- */
+
+function previewImage(event, previewId) {
+  const reader = new FileReader();
+  const previewImg = document.getElementById(previewId);
+
+  reader.onload = function () {
+    if (reader.readyState === 2) {
+      previewImg.src = reader.result;
+    }
+  };
+
+  reader.readAsDataURL(event.target.files[0]);
+}
+
+/* ------- REQUIREMENT STEP --------- */
+// Check if all input have been checked to update wizard status
 function checkRequirementFormCompletion() {
   const electricCarSelected = $('input[name="electricCar"]:checked').length > 0;
   const evChargerSelected =
@@ -221,31 +285,7 @@ function checkRequirementFormCompletion() {
   }
 }
 
-function updateWizardState(nextStatus, currentStep) {
-  if (nextStatus) {
-    $(".sw-btn-next").prop("disabled", false);
-    $(".sw-btn-next").removeClass("disabled");
-    $("#smartwizard").smartWizard("stepState", [currentStep], "done");
-    $("#smartwizard").smartWizard("unsetState", [currentStep + 1], "disable");
-  } else {
-    $(".sw-btn-next").prop("disabled", true);
-    $("#smartwizard").smartWizard("unsetState", [currentStep], "done");
-    $("#smartwizard").smartWizard("stepState", [currentStep + 1], "disable");
-  }
-}
-
-function previewImage(event, previewId) {
-  const reader = new FileReader();
-  const previewImg = document.getElementById(previewId);
-
-  reader.onload = function () {
-    if (reader.readyState === 2) {
-      previewImg.src = reader.result;
-    }
-  };
-
-  reader.readAsDataURL(event.target.files[0]);
-}
+/* ----------- OPTIONS STEP ---------- */
 
 function updateTotal(formId, totalId) {
   let total = 0;
