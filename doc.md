@@ -9,11 +9,20 @@
 
 
 ## Address
-- Confirm property details
-- Please confirm if the property details are correct
-- Confirm property details are correct button
-- Edit property details
-  - Replace Confirm property details with Save and next
+- Insert postcode
+  - Show property for that postcode in search suggestions
+  - User selects address (search suggestion)
+    - Fetch property details for that address in disabled form
+      - Confirm property details (button)
+        - Show modal for confirm property details
+          - Confirm property details are correct (button)
+            - Hide Confirm property details (button)
+            - User cannot edit information after confirming details
+            - Enable Next (button) of wizard to move to next step
+          - Edit property details (button)
+            - Enable address form
+            - Replace Confirm property details (button) with Save and next (button)
+    - Show Previous (to select new postcode) Next (enable if details are confirmed)
   
 ## Requirements
 - Electric Car
@@ -90,7 +99,13 @@
       - Enable if solarBattery input is unchecked
     - solarBattery input
 
-- Total after package selection
+- Summary after package selection
   - Total from package
     - Deduct discount
       - Show final Total
+  - Total bill saving
+  - Total carbon saving
+  - Total increase in property value
+  - EPC rating
+    - Nested if-else on carbon saving to calculate EPC rating
+      - Show current rating and rating with package
