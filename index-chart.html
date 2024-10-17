@@ -13,6 +13,7 @@
       href="./assets/libs/jquery-smartwizard-master/dist/css/smart_wizard_all.min.css"
     />
     <link rel="stylesheet" href="./assets/css/custom.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css">
   </head>
 
   <body>
@@ -41,6 +42,9 @@
               <li class="nav-item">
                 <a class="nav-link" href="#options">Options</a>
               </li>
+              <!--  <li class="nav-item">
+                <a class="nav-link" href="#submission">Submission</a>
+              </li> -->
             </ul>
 
             <div class="tab-content" style="">
@@ -783,7 +787,15 @@
                         </p>
                       </div>
                     </div>
-                  </div>                  
+                  </div>
+                  <div class="row">
+                    <div class="col-md-4">
+                      <div id="carbon-saving-chart"></div>
+                    </div>
+                    <div class="col-md-4">
+                      <div id="epc-chart"></div>
+                    </div>
+                  </div>
                   <div class="row my-2">
                     <div>
                       <h3>Summary</h3>
@@ -844,6 +856,18 @@
                   </div>
                 </div>
               </div>
+
+              <!-- Step 4: Submission -->
+              <!-- <div
+                id="submission"
+                class="tab-pane"
+                role="tabpanel"
+                aria-labelledby="options"
+              >
+                <div class="row">
+                  <h1 class="text-center">Submit details</h1>
+                </div>
+              </div> -->
             </div>
           </div>
         </div>
@@ -894,6 +918,85 @@
       </div>
     </div>
 
+    <!-- Contact Modal Structure -->
+    <div
+      class="modal fade"
+      id="contactModal"
+      tabindex="-1"
+      aria-labelledby="contactModalLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="contactModalLabel">Contact Details</h5>
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="modal"
+              aria-label="Close"
+            ></button>
+          </div>
+          <div class="modal-body">
+            <p>
+              Enter contact details to receive comprehensive details of your
+              Home Energy Efficiency Plan.
+            </p>
+            <div class="col-md-9">
+              <form id="options_contact_form">
+                <div class="row g-3">
+                  <div class="col-md-4">
+                    <label for="name" class="form-label">Name</label>
+                  </div>
+                  <div class="col-md-8">
+                    <input
+                      type="text"
+                      class="form-control"
+                      id="name"
+                      placeholder="Enter Full Name"
+                    />
+                  </div>
+
+                  <div class="col-md-4">
+                    <label for="email" class="form-label">Email</label>
+                  </div>
+                  <div class="col-md-8">
+                    <input
+                      type="email"
+                      class="form-control"
+                      id="email"
+                      placeholder="Enter Email Address"
+                    />
+                  </div>
+                  <div class="col-md-4">
+                    <label for="phone" class="form-label">Phone</label>
+                  </div>
+                  <div class="col-md-8">
+                    <input
+                      type="tel"
+                      class="form-control"
+                      id="phone"
+                      placeholder="Enter Phone Number"
+                    />
+                  </div>
+                </div>
+              </form>
+            </div>
+          </div>
+
+          <div class="modal-footer">
+            <button
+              type="button"
+              class="btn btn-success"
+              id="sumbitContactDetails"
+            >
+              Submit
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <!-- Bootstrap JS -->
     <script src="../assets/libs/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <!-- jQuery and SmartWizard JS -->
@@ -902,6 +1005,7 @@
     <script src="../assets/libs/simplebar/dist/simplebar.js"></script>
     <script src="../assets/libs/jquery-smartwizard-master/dist/js/jquery.smartWizard.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
     <script src="../assets/js/custom.js"></script>
   </body>
 </html>

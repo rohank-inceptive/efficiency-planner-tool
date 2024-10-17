@@ -7,6 +7,8 @@ $(document).ready(function () {
 
   let isAddressValid = false;
   let isAddressSelected = false;
+  let isRequirementValid = false;
+  let isOptionsValid = false;
   let currentPackageOption = "";
 
   /* -------- COMMON JS ------- */
@@ -16,29 +18,71 @@ $(document).ready(function () {
     transition: {
       animation: "fade",
     },
-    disabledSteps: [1, 2],
+    disabledSteps: [1, 2, 3],
     toolbar: {
       showNextButton: false,
       showPreviousButton: false,
     },
   });
 
-  /* ---- ADDRESS STEP -----*/
   // Update wizard state on address state
   $("#smartwizard").on(
     "showStep",
     function (e, anchorObject, stepIndex, stepDirection, stepPosition) {
+      /* Enable next button if step is valid */
+      setButtonState($(".sw-btn-next"), false);
       if (stepIndex == 0 && isAddressValid) {
         updateWizardState(true, 0);
-      } else {
-        setButtonState($(".sw-btn-next"), false);
+      } else if (stepIndex === 1 && isRequirementValid) {
+        updateWizardState(true, 1);
+      } else if (stepIndex === 2 && isOptionsValid) {
+        setButtonState($(".sw-btn-next"), true);
       }
+
       if (stepIndex === 0 && isAddressSelected) {
         setButtonState($(".sw-btn-prev"), true);
+      }
+
+      /* Options */
+      if (stepIndex === 2) {
+        $(".sw-btn-next").text("Submit");
+      } else {
+        $(".sw-btn-next").text("Next");
       }
     }
   );
 
+  // Update wizard on click event
+  $("#smartwizard").on("click", ".sw-btn-prev", function () {
+    let stepInfo = $("#smartwizard").smartWizard("getStepInfo");
+    // Show postcode search on previous button click
+    if (stepInfo.currentStep === 0) {
+      isAddressSelected = false;
+      var options = {
+        toolbar: {
+          showNextButton: false,
+          showPreviousButton: false,
+        },
+      };
+      $("#smartwizard").smartWizard("setOptions", options);
+      toggleVisibility($("#validateAddressModal"), true);
+      toggleVisibility($("#saveAddress"), false);
+      toggleVisibility($("#epc_verification_form"), false);
+      toggleVisibility($("#search_postcode_form"), true);
+      setButtonState($("#smartwizard .sw-btn-prev"), false);
+      updateWizard();
+    }
+  });
+
+  $("#smartwizard").on("click", ".sw-btn-next", function () {
+    let stepInfo = $("#smartwizard").smartWizard("getStepInfo");
+    // Open modal for submission of contact detail
+    if (stepInfo.currentStep === 2) {
+      $("#contactModal").modal("show");
+    }
+  });
+
+  /* ---- ADDRESS STEP -----*/
   /* Dummy suggestion search input */
   // Show dummy suggestions on search input
   $("#postalCode").on("input", function () {
@@ -96,27 +140,6 @@ $(document).ready(function () {
     $("#smartwizard .sw-btn-prev").prop("disabled", false);
     $("#smartwizard .sw-btn-next").prop("disabled", true);
     updateWizard();
-  });
-
-  // Show postcode search on previous button click
-  $("#smartwizard").on("click", ".sw-btn-prev", function () {
-    let stepInfo = $("#smartwizard").smartWizard("getStepInfo");
-    if (stepInfo.currentStep === 0) {
-      isAddressSelected = false;
-      var options = {
-        toolbar: {
-          showNextButton: false,
-          showPreviousButton: false,
-        },
-      };
-      $("#smartwizard").smartWizard("setOptions", options);
-      toggleVisibility($("#validateAddressModal"), true);
-      toggleVisibility($("#saveAddress"), false);
-      toggleVisibility($("#epc_verification_form"), false);
-      toggleVisibility($("#search_postcode_form"), true);
-      setButtonState($("#smartwizard .sw-btn-prev"), false);
-      updateWizard();
-    }
   });
 
   // Validate address and enable requirement step
@@ -197,7 +220,6 @@ $(document).ready(function () {
     const allCheckboxes = form.find('input[type="checkbox"]');
     if (allCheckboxes.filter(":checked").length === 0) {
       currentPackageOption = "";
-      // $("#options").find(".card").css("border", "");
       $("#options").find(".card").removeClass("selected-package");
     }
 
@@ -208,6 +230,185 @@ $(document).ready(function () {
     } else {
       updateTotal("higher-cost-form", "higherCostTotal");
     }
+  });
+  // Carbon saving chart
+
+  var chart = {
+    series: [{ name: "Saving", data: [809, 2000, 3268, 6255] }],
+
+    chart: {
+      type: "bar",
+      toolbar: { show: false },
+      foreColor: "#2a3547",
+      fontFamily: "inherit",
+      sparkline: { enabled: false },
+    },
+
+    colors: ["#13deb9"],
+
+    plotOptions: {
+      bar: {
+        horizontal: false,
+        columnWidth: "38%",
+        borderRadius: [6],
+        borderRadiusApplication: "end",
+        borderRadiusWhenStacked: "all",
+      },
+    },
+    markers: { size: 0 },
+    dataLabels: {
+      enabled: false,
+    },
+    legend: {
+      show: false,
+    },
+    grid: {
+      show: false,
+    },
+    xaxis: {
+      show: false,
+      type: "categories",
+      categories: ["2023", "2024", "2025", "2026"],
+      labels: {
+        style: { cssClass: "red--text lighten-1--text fill-color" },
+      },
+    },
+    yaxis: {
+      show: false,
+      min: 0,
+      max: 7000,
+      tickAmount: 4,
+    },
+    stroke: {
+      show: false,
+      width: 3,
+      lineCap: "butt",
+      colors: ["transparent"],
+    },
+    title: {
+      text: "Carbon Saving",
+      align: "center",
+      floating: true,
+    },
+    responsive: [
+      {
+        breakpoint: 600,
+        options: {
+          plotOptions: {
+            bar: {
+              borderRadius: 3,
+            },
+          },
+        },
+      },
+    ],
+  };
+
+  var chart = new ApexCharts(
+    document.querySelector("#carbon-saving-chart"),
+    chart
+  );
+  chart.render();
+
+  var epc_chart = {
+    series: [
+      {
+        name: "Properties with EPC rating",
+        data: [800, 8000, 1200],
+      },
+    ],
+
+    chart: {
+      type: "bar",
+      toolbar: { show: false },
+      foreColor: "#2a3547",
+      fontFamily: "inherit",
+    },
+
+    colors: ["#13deb9", "#ffae1f", "#fa896b"],
+
+    plotOptions: {
+      bar: {
+        barHeight: "70%",
+        distributed: true,
+        horizontal: true,
+        dataLabels: {
+          position: "bottom",
+        },
+      },
+    },
+    markers: { size: 0 },
+
+    dataLabels: {
+      enabled: true,
+      textAnchor: "start",
+      style: {
+        colors: ["#5A6A85"],
+      },
+      formatter: function (val, opt) {
+        return opt.w.globals.labels[opt.dataPointIndex] + ":  " + val;
+      },
+      offsetX: 0,
+    },
+    title: {
+      text: "EPC Rating of Properties",
+      align: "center",
+      floating: true,
+    },
+    legend: {
+      show: true,
+    },
+
+    grid: {
+      show: false,
+    },
+
+    xaxis: {
+      categories: ["A-D", "E", "F"],
+    },
+
+    yaxis: {
+      show: false,
+    },
+
+    responsive: [
+      {
+        breakpoint: 600,
+        options: {
+          plotOptions: {
+            bar: {
+              borderRadius: 3,
+            },
+          },
+        },
+      },
+    ],
+  };
+
+  var epc_chart = new ApexCharts(
+    document.querySelector("#epc-chart"),
+    epc_chart
+  );
+  epc_chart.render();
+
+  // Contact submit
+  $("#sumbitContactDetails").click(function (e) {
+    e.preventDefault();
+    toastr.options = {
+      closeButton: false,
+      progressBar: false,
+      positionClass: "toast-top-right",
+      preventDuplicates: false,
+      showDuration: "300",
+      showEasing: "swing",
+      hideEasing: "linear",
+      showMethod: "fadeIn",
+      hideMethod: "fadeOut",
+    };
+    toastr.success("Contact details shared successfully.");
+    setTimeout(() => {
+      location.reload();
+    }, 2000);
   });
 });
 
@@ -243,7 +444,9 @@ function toggleVisibility(element, show) {
 
 // Update wizard state of steps based on current step
 function updateWizardState(nextStatus, currentStep) {
+  let stepInfo = $("#smartwizard").smartWizard("getStepInfo");
   if (nextStatus) {
+    console.log(stepInfo);
     setButtonState($(".sw-btn-next"), true);
     $("#smartwizard").smartWizard("stepState", [currentStep], "done");
     $("#smartwizard").smartWizard("unsetState", [currentStep + 1], "disable");
@@ -279,14 +482,17 @@ function checkRequirementFormCompletion() {
     $("#electricCarNo").is(":checked");
   const loftSpaceSelected = $('input[name="loftSpace"]:checked').length > 0;
   if (electricCarSelected && evChargerSelected && loftSpaceSelected) {
+    isRequirementValid = true;
     updateWizardState(true, 1);
   } else {
+    isRequirementValid = false;
     updateWizardState(false, 1);
   }
 }
 
 /* ----------- OPTIONS STEP ---------- */
 
+// Update summary based on user checkbox selection
 function updateTotal(formId, totalId) {
   let total = 0;
   let discountPercent = 0.1;
@@ -333,4 +539,11 @@ function updateTotal(formId, totalId) {
   $("#totalPropertyValue").text(propertyValue);
   $("#epcRating").text(epcRating);
   $(`#${totalId}`).text(total);
+
+  if (total != 0) {
+    isOptionsValid = true;
+    setButtonState($("#smartwizard .sw-btn-next"), true);
+  } else {
+    isOptionsValid = false;
+  }
 }
