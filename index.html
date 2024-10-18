@@ -900,6 +900,85 @@
       </div>
     </div>
 
+    <!-- Contact Modal Structure -->
+    <div
+      class="modal fade"
+      id="contactModal"
+      tabindex="-1"
+      aria-labelledby="contactModalLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="contactModalLabel">Contact Details</h5>
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="modal"
+              aria-label="Close"
+            ></button>
+          </div>
+          <div class="modal-body">
+            <p>
+              Enter contact details to receive comprehensive details of your
+              Home Energy Efficiency Plan.
+            </p>
+            <div class="col-md-9">
+              <form id="options_contact_form">
+                <div class="row g-3">
+                  <div class="col-md-4">
+                    <label for="name" class="form-label">Name</label>
+                  </div>
+                  <div class="col-md-8">
+                    <input
+                      type="text"
+                      class="form-control"
+                      id="name"
+                      placeholder="Enter Full Name"
+                    />
+                  </div>
+
+                  <div class="col-md-4">
+                    <label for="email" class="form-label">Email</label>
+                  </div>
+                  <div class="col-md-8">
+                    <input
+                      type="email"
+                      class="form-control"
+                      id="email"
+                      placeholder="Enter Email Address"
+                    />
+                  </div>
+                  <div class="col-md-4">
+                    <label for="phone" class="form-label">Phone</label>
+                  </div>
+                  <div class="col-md-8">
+                    <input
+                      type="tel"
+                      class="form-control"
+                      id="phone"
+                      placeholder="Enter Phone Number"
+                    />
+                  </div>
+                </div>
+              </form>
+            </div>
+          </div>
+
+          <div class="modal-footer">
+            <button
+              type="button"
+              class="btn btn-success"
+              id="sumbitContactDetails"
+            >
+              Submit
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <script>
       page = "withoutChart";
     </script>
