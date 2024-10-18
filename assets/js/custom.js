@@ -238,18 +238,12 @@ $(document).ready(function () {
       updateTotal("higher-cost-form", "higherCostTotal");
     }
     if (page == "withChart") {
-      // Carbon Saving Chart
-      chart.updateSeries([
-        {
-          data: [300, optionsCarbonSaving + 300],
-        },
-      ]);
-      // EPC Rating Chart
+      // Chart
       let chartEpcRating = 0;
       let potentialColor = "";
       if (optionsCarbonSaving >= 1000) {
         chartEpcRating = 6;
-        potentialColor = "#007f3b";
+        potentialColor = "#16c924";
       } else if (optionsCarbonSaving >= 500) {
         chartEpcRating = 5;
         potentialColor = "#55a849";
@@ -263,6 +257,26 @@ $(document).ready(function () {
         chartEpcRating = 2;
         potentialColor = "#ffb75d";
       }
+
+      // Carbon Saving Chart
+      chart.updateSeries([
+        {
+          data: [
+            {
+              y: 300,
+              x: "Current",
+            },
+            {
+              y: optionsCarbonSaving + 300,
+              x: "Potential",
+            },
+          ],
+        },
+      ]);
+      chart.updateOptions({
+        colors: ["#ffb75d", potentialColor],
+      });
+
       epc_chart.updateSeries([
         {
           data: [
@@ -285,7 +299,7 @@ $(document).ready(function () {
 
   if (page == "withChart") {
     // Carbon saving chart
-    var carbonSavingOption = {
+    /*     var carbonSavingOption = {
       series: [{ name: "Carbon Saving", data: [300, 0] }],
 
       chart: {
@@ -296,7 +310,7 @@ $(document).ready(function () {
         sparkline: { enabled: false },
       },
 
-      colors: ["#13deb9"],
+      colors: ["#ffb75d"],
 
       plotOptions: {
         bar: {
@@ -354,8 +368,107 @@ $(document).ready(function () {
           },
         },
       ],
-    };
+    }; */
+    var carbonSavingOption = {
+      series: [
+        {
+          name: "Carbon Saving",
+          data: [
+            {
+              y: 300,
+              x: "Current",
+            },
+            {
+              y: 0,
+              x: "Potential",
+            },
+          ],
+        },
+      ],
 
+      chart: {
+        type: "bar",
+        toolbar: { show: false },
+        foreColor: "#2a3547",
+        fontFamily: "inherit",
+      },
+
+      colors: ["#ffb75d"],
+
+      plotOptions: {
+        bar: {
+          barHeight: "60%",
+          distributed: true,
+          horizontal: true,
+          dataLabels: {
+            position: "bottom",
+          },
+        },
+      },
+      markers: { size: 0 },
+
+      dataLabels: {
+        enabled: true,
+        textAnchor: "start",
+        style: {
+          colors: ["#5A6A85"],
+        },
+        formatter: function (val, opt) {
+          return val + " Kg/Year";
+        },
+        offsetX: 10,
+      },
+      tooltip: {
+        enabled: false,
+      },
+      title: {
+        text: "Carbon Saving",
+        align: "center",
+        floating: true,
+      },
+      legend: {
+        show: true,
+      },
+
+      grid: {
+        show: false,
+        padding: {
+          left: 20,
+          right: 0,
+        },
+      },
+
+      xaxis: {
+        min: 0,
+        max: 1600,
+        tickAmount: 4,
+      },
+
+      yaxis: {
+        show: true,
+        type: "categories",
+        categories: ["Current", "Potential"],
+        labels: {
+          style: {
+            colors: ["#5A6A85"],
+            fontSize: "12px",
+          },
+        },
+      },
+
+      responsive: [
+        {
+          breakpoint: 600,
+          options: {
+            plotOptions: {
+              bar: {
+                borderRadius: 3,
+              },
+            },
+          },
+        },
+      ],
+    };
     var chart = new ApexCharts(
       document.querySelector("#carbon-saving-chart"),
       carbonSavingOption
@@ -624,7 +737,12 @@ function updateTotal(formId, totalId) {
   $("#totalBillSaving").text(billSaving);
   $("#totalCarbonSaving").text(optionsCarbonSaving);
   $("#totalPropertyValue").text(propertyValue);
-  $("#epcRating").text(optionsEpcRating);
+  if ((page = "withChart")) {
+    ratingIcon = "fa-" + optionsEpcRating.toLowerCase();
+    $("#epcRating").addClass(ratingIcon);
+  } else {
+    $("#epcRating").text(optionsEpcRating);
+  }
   $(`#${totalId}`).text(total);
 
   if (total != 0) {
