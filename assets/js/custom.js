@@ -1,12 +1,12 @@
+optionsCarbonSaving = 0;
+optionsEpcRating = "E";
+
 $(document).ready(function () {
   /* -------- GLOBAL VARIABLE -------- */
   const dummyAddresses = [
     "33, Langham Gardens, Wembley, HA0 3RG",
     "221B Baker Street, Marylebone, London NW1 6XE",
   ];
-
-  let optionsCarbonSaving = 0;
-  let optionsEpcRating = "E";
 
   let isAddressValid = false;
   let isAddressSelected = false;
@@ -238,19 +238,55 @@ $(document).ready(function () {
       updateTotal("higher-cost-form", "higherCostTotal");
     }
     if (page == "withChart") {
+      // Carbon Saving Chart
       chart.updateSeries([
         {
-          data: [optionsCarbonSaving],
+          data: [300, optionsCarbonSaving + 300],
         },
       ]);
+      // EPC Rating Chart
+      let chartEpcRating = 0;
+      let potentialColor = "";
+      if (optionsCarbonSaving >= 1000) {
+        chartEpcRating = 6;
+        potentialColor = "#007f3b";
+      } else if (optionsCarbonSaving >= 500) {
+        chartEpcRating = 5;
+        potentialColor = "#55a849";
+      } else if (optionsCarbonSaving >= 100) {
+        chartEpcRating = 4;
+        potentialColor = "#efff5e";
+      } else if (optionsCarbonSaving > 10) {
+        chartEpcRating = 3;
+        potentialColor = "#ffd966";
+      } else {
+        chartEpcRating = 2;
+        potentialColor = "#ffb75d";
+      }
+      epc_chart.updateSeries([
+        {
+          data: [
+            {
+              y: 2,
+              x: "Current",
+            },
+            {
+              y: chartEpcRating,
+              x: "Potential",
+            },
+          ],
+        },
+      ]);
+      epc_chart.updateOptions({
+        colors: ["#ffb75d", potentialColor],
+      });
     }
   });
 
   if (page == "withChart") {
     // Carbon saving chart
-
     var carbonSavingOption = {
-      series: [{ name: "Carbon Saving", data: [0] }],
+      series: [{ name: "Carbon Saving", data: [300, 0] }],
 
       chart: {
         type: "bar",
@@ -284,7 +320,7 @@ $(document).ready(function () {
       xaxis: {
         show: false,
         type: "categories",
-        categories: ["Potential Carbon Saving"],
+        categories: ["Current Carbon Saving", "Potential Carbon Saving"],
         labels: {
           style: { cssClass: "red--text lighten-1--text fill-color" },
         },
@@ -292,7 +328,7 @@ $(document).ready(function () {
       yaxis: {
         show: false,
         min: 0,
-        max: 7000,
+        max: 1600,
         tickAmount: 4,
       },
       stroke: {
@@ -330,7 +366,16 @@ $(document).ready(function () {
       series: [
         {
           name: "Properties with EPC rating",
-          data: [800, 8000, 1200],
+          data: [
+            {
+              y: 2,
+              x: "Current",
+            },
+            {
+              y: 0,
+              x: "Potential",
+            },
+          ],
         },
       ],
 
@@ -341,11 +386,11 @@ $(document).ready(function () {
         fontFamily: "inherit",
       },
 
-      colors: ["#13deb9", "#ffae1f", "#fa896b"],
+      colors: ["#ffb75d"],
 
       plotOptions: {
         bar: {
-          barHeight: "70%",
+          barHeight: "60%",
           distributed: true,
           horizontal: true,
           dataLabels: {
@@ -362,12 +407,20 @@ $(document).ready(function () {
           colors: ["#5A6A85"],
         },
         formatter: function (val, opt) {
-          return opt.w.globals.labels[opt.dataPointIndex] + ":  " + val;
+          var epc_ratings = ["F", "E", "D", "C", "B", "A"];
+          var rating_text = "";
+          if (val) {
+            rating_text = epc_ratings[val - 1];
+          }
+          return "EPC Rating:  " + rating_text;
         },
-        offsetX: 0,
+        offsetX: 10,
+      },
+      tooltip: {
+        enabled: false,
       },
       title: {
-        text: "EPC Rating of Properties",
+        text: "EPC Rating of Property",
         align: "center",
         floating: true,
       },
@@ -377,14 +430,32 @@ $(document).ready(function () {
 
       grid: {
         show: false,
+        padding: {
+          left: 20,
+          right: 0,
+        },
       },
 
       xaxis: {
-        categories: ["A-D", "E", "F"],
+        min: 1,
+        max: 6,
+        labels: {
+          formatter: function (value) {
+            var epc_ratings = ["F", "E", "D", "C", "B", "A"];
+            return epc_ratings[value - 1];
+          },
+        },
       },
 
       yaxis: {
-        show: false,
+        show: true,
+        categories: ["Current", "Potential"],
+        labels: {
+          style: {
+            colors: ["#5A6A85"],
+            fontSize: "12px",
+          },
+        },
       },
 
       responsive: [
