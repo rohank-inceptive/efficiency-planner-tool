@@ -738,7 +738,8 @@ function updateTotal(formId, totalId) {
   $("#totalCarbonSaving").text(optionsCarbonSaving);
   $("#totalPropertyValue").text(propertyValue);
   if ((page = "withChart")) {
-    ratingIcon = "fa-" + optionsEpcRating.toLowerCase();
+    $("#epcRating").removeClass();
+    ratingIcon = "fa-solid h2 text-center fa-" + optionsEpcRating.toLowerCase();
     $("#epcRating").addClass(ratingIcon);
   } else {
     $("#epcRating").text(optionsEpcRating);
