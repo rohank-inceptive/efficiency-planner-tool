@@ -109,3 +109,8 @@
   - EPC rating
     - Nested if-else on carbon saving to calculate EPC rating
       - Show current rating and rating with package
+- Chart
+  - Carbon saving
+    - Show carbon saving dynamically using total carbon saving amount
+  - EPC rating
+    - Updated EPC rating on bar chart

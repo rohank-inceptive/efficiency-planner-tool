@@ -5,6 +5,9 @@ $(document).ready(function () {
     "221B Baker Street, Marylebone, London NW1 6XE",
   ];
 
+  let optionsCarbonSaving = 0;
+  let optionsEpcRating = "E";
+
   let isAddressValid = false;
   let isAddressSelected = false;
   let isRequirementValid = false;
@@ -146,6 +149,7 @@ $(document).ready(function () {
   $("#confirmAddressValidation").on("click", function (e) {
     e.preventDefault();
     isAddressValid = true;
+    toastr.success("Property Details Confirmed Successfully");
     setButtonState($("#smartwizard .sw-btn-next"), true);
     updateWizardState(true, 0);
     toggleVisibility($("#validateAddressModal"), false);
@@ -166,8 +170,11 @@ $(document).ready(function () {
   // Enable requirement step and navigate to it
   $("#saveAddress").on("click", function (e) {
     e.preventDefault();
-    updateWizardState(true, 0);
-    $("#smartwizard").smartWizard("next");
+    toastr.success("Property Details Updated Successfully.");
+    setTimeout(() => {
+      updateWizardState(true, 0);
+      $("#smartwizard").smartWizard("next");
+    }, 1500);
   });
 
   /* Requirement */
@@ -230,166 +237,176 @@ $(document).ready(function () {
     } else {
       updateTotal("higher-cost-form", "higherCostTotal");
     }
+    if (page == "withChart") {
+      chart.updateSeries([
+        {
+          data: [optionsCarbonSaving],
+        },
+      ]);
+    }
   });
-  // Carbon saving chart
 
-  var chart = {
-    series: [{ name: "Saving", data: [809, 2000, 3268, 6255] }],
+  if (page == "withChart") {
+    // Carbon saving chart
 
-    chart: {
-      type: "bar",
-      toolbar: { show: false },
-      foreColor: "#2a3547",
-      fontFamily: "inherit",
-      sparkline: { enabled: false },
-    },
+    var carbonSavingOption = {
+      series: [{ name: "Carbon Saving", data: [0] }],
 
-    colors: ["#13deb9"],
-
-    plotOptions: {
-      bar: {
-        horizontal: false,
-        columnWidth: "38%",
-        borderRadius: [6],
-        borderRadiusApplication: "end",
-        borderRadiusWhenStacked: "all",
+      chart: {
+        type: "bar",
+        toolbar: { show: false },
+        foreColor: "#2a3547",
+        fontFamily: "inherit",
+        sparkline: { enabled: false },
       },
-    },
-    markers: { size: 0 },
-    dataLabels: {
-      enabled: false,
-    },
-    legend: {
-      show: false,
-    },
-    grid: {
-      show: false,
-    },
-    xaxis: {
-      show: false,
-      type: "categories",
-      categories: ["2023", "2024", "2025", "2026"],
-      labels: {
-        style: { cssClass: "red--text lighten-1--text fill-color" },
+
+      colors: ["#13deb9"],
+
+      plotOptions: {
+        bar: {
+          horizontal: false,
+          columnWidth: "38%",
+          borderRadius: [6],
+          borderRadiusApplication: "end",
+          borderRadiusWhenStacked: "all",
+        },
       },
-    },
-    yaxis: {
-      show: false,
-      min: 0,
-      max: 7000,
-      tickAmount: 4,
-    },
-    stroke: {
-      show: false,
-      width: 3,
-      lineCap: "butt",
-      colors: ["transparent"],
-    },
-    title: {
-      text: "Carbon Saving",
-      align: "center",
-      floating: true,
-    },
-    responsive: [
-      {
-        breakpoint: 600,
-        options: {
-          plotOptions: {
-            bar: {
-              borderRadius: 3,
+      markers: { size: 0 },
+      dataLabels: {
+        enabled: false,
+      },
+      legend: {
+        show: false,
+      },
+      grid: {
+        show: false,
+      },
+      xaxis: {
+        show: false,
+        type: "categories",
+        categories: ["Potential Carbon Saving"],
+        labels: {
+          style: { cssClass: "red--text lighten-1--text fill-color" },
+        },
+      },
+      yaxis: {
+        show: false,
+        min: 0,
+        max: 7000,
+        tickAmount: 4,
+      },
+      stroke: {
+        show: false,
+        width: 3,
+        lineCap: "butt",
+        colors: ["transparent"],
+      },
+      title: {
+        text: "Carbon Saving",
+        align: "center",
+        floating: true,
+      },
+      responsive: [
+        {
+          breakpoint: 600,
+          options: {
+            plotOptions: {
+              bar: {
+                borderRadius: 3,
+              },
             },
           },
         },
-      },
-    ],
-  };
+      ],
+    };
 
-  var chart = new ApexCharts(
-    document.querySelector("#carbon-saving-chart"),
-    chart
-  );
-  chart.render();
+    var chart = new ApexCharts(
+      document.querySelector("#carbon-saving-chart"),
+      carbonSavingOption
+    );
+    chart.render();
 
-  var epc_chart = {
-    series: [
-      {
-        name: "Properties with EPC rating",
-        data: [800, 8000, 1200],
-      },
-    ],
-
-    chart: {
-      type: "bar",
-      toolbar: { show: false },
-      foreColor: "#2a3547",
-      fontFamily: "inherit",
-    },
-
-    colors: ["#13deb9", "#ffae1f", "#fa896b"],
-
-    plotOptions: {
-      bar: {
-        barHeight: "70%",
-        distributed: true,
-        horizontal: true,
-        dataLabels: {
-          position: "bottom",
+    var epc_chart = {
+      series: [
+        {
+          name: "Properties with EPC rating",
+          data: [800, 8000, 1200],
         },
+      ],
+
+      chart: {
+        type: "bar",
+        toolbar: { show: false },
+        foreColor: "#2a3547",
+        fontFamily: "inherit",
       },
-    },
-    markers: { size: 0 },
 
-    dataLabels: {
-      enabled: true,
-      textAnchor: "start",
-      style: {
-        colors: ["#5A6A85"],
-      },
-      formatter: function (val, opt) {
-        return opt.w.globals.labels[opt.dataPointIndex] + ":  " + val;
-      },
-      offsetX: 0,
-    },
-    title: {
-      text: "EPC Rating of Properties",
-      align: "center",
-      floating: true,
-    },
-    legend: {
-      show: true,
-    },
+      colors: ["#13deb9", "#ffae1f", "#fa896b"],
 
-    grid: {
-      show: false,
-    },
-
-    xaxis: {
-      categories: ["A-D", "E", "F"],
-    },
-
-    yaxis: {
-      show: false,
-    },
-
-    responsive: [
-      {
-        breakpoint: 600,
-        options: {
-          plotOptions: {
-            bar: {
-              borderRadius: 3,
-            },
+      plotOptions: {
+        bar: {
+          barHeight: "70%",
+          distributed: true,
+          horizontal: true,
+          dataLabels: {
+            position: "bottom",
           },
         },
       },
-    ],
-  };
+      markers: { size: 0 },
 
-  var epc_chart = new ApexCharts(
-    document.querySelector("#epc-chart"),
-    epc_chart
-  );
-  epc_chart.render();
+      dataLabels: {
+        enabled: true,
+        textAnchor: "start",
+        style: {
+          colors: ["#5A6A85"],
+        },
+        formatter: function (val, opt) {
+          return opt.w.globals.labels[opt.dataPointIndex] + ":  " + val;
+        },
+        offsetX: 0,
+      },
+      title: {
+        text: "EPC Rating of Properties",
+        align: "center",
+        floating: true,
+      },
+      legend: {
+        show: true,
+      },
+
+      grid: {
+        show: false,
+      },
+
+      xaxis: {
+        categories: ["A-D", "E", "F"],
+      },
+
+      yaxis: {
+        show: false,
+      },
+
+      responsive: [
+        {
+          breakpoint: 600,
+          options: {
+            plotOptions: {
+              bar: {
+                borderRadius: 3,
+              },
+            },
+          },
+        },
+      ],
+    };
+
+    var epc_chart = new ApexCharts(
+      document.querySelector("#epc-chart"),
+      epc_chart
+    );
+    epc_chart.render();
+  }
 
   // Contact submit
   $("#sumbitContactDetails").click(function (e) {
@@ -446,7 +463,6 @@ function toggleVisibility(element, show) {
 function updateWizardState(nextStatus, currentStep) {
   let stepInfo = $("#smartwizard").smartWizard("getStepInfo");
   if (nextStatus) {
-    console.log(stepInfo);
     setButtonState($(".sw-btn-next"), true);
     $("#smartwizard").smartWizard("stepState", [currentStep], "done");
     $("#smartwizard").smartWizard("unsetState", [currentStep + 1], "disable");
@@ -499,26 +515,26 @@ function updateTotal(formId, totalId) {
   let discountValue = 0;
   let finalTotal = 0;
   let billSaving = 0;
-  let carbonSaving = 0;
   let propertyValue = 0;
-  let epcRating = "E";
+  optionsEpcRating = "E";
+  optionsCarbonSaving = 0;
 
   $(`#${formId} input[type="checkbox"]`).each(function () {
     if ($(this).is(":checked")) {
       total += parseInt($(this).val());
       billSaving += parseInt($(this).data("bill-saving"));
-      carbonSaving += parseInt($(this).data("carbon-saving"));
+      optionsCarbonSaving += parseInt($(this).data("carbon-saving"));
       propertyValue += parseInt($(this).data("value-added"));
-      if (carbonSaving >= 1000) {
-        epcRating = "A";
-      } else if (carbonSaving >= 500) {
-        epcRating = "B";
-      } else if (carbonSaving >= 100) {
-        epcRating = "C";
-      } else if (carbonSaving > 10) {
-        epcRating = "D";
+      if (optionsCarbonSaving >= 1000) {
+        optionsEpcRating = "A";
+      } else if (optionsCarbonSaving >= 500) {
+        optionsEpcRating = "B";
+      } else if (optionsCarbonSaving >= 100) {
+        optionsEpcRating = "C";
+      } else if (optionsCarbonSaving > 10) {
+        optionsEpcRating = "D";
       } else {
-        epcRating = "E";
+        optionsEpcRating = "E";
       }
     }
   });
@@ -535,9 +551,9 @@ function updateTotal(formId, totalId) {
   $("#discountAmount").text(discountValue);
   $("#finalTotal").text(finalTotal);
   $("#totalBillSaving").text(billSaving);
-  $("#totalCarbonSaving").text(carbonSaving);
+  $("#totalCarbonSaving").text(optionsCarbonSaving);
   $("#totalPropertyValue").text(propertyValue);
-  $("#epcRating").text(epcRating);
+  $("#epcRating").text(optionsEpcRating);
   $(`#${totalId}`).text(total);
 
   if (total != 0) {

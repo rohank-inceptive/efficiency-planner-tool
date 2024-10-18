@@ -13,6 +13,10 @@
       href="./assets/libs/jquery-smartwizard-master/dist/css/smart_wizard_all.min.css"
     />
     <link rel="stylesheet" href="./assets/css/custom.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css"
+    />
   </head>
 
   <body>
@@ -783,12 +787,12 @@
                         </p>
                       </div>
                     </div>
-                  </div>                  
+                  </div>
                   <div class="row my-2">
                     <div>
                       <h3>Summary</h3>
                     </div>
-                    <div class="col-md-5">
+                    <div class="col-md-6">
                       <div class="d-flex justify-content-between">
                         <h6>Total from Package</h6>
                         <span>£<span id="totalFromPackage">0</span></span>
@@ -802,7 +806,7 @@
                         <span>£<span id="finalTotal">0</span></span>
                       </div>
                     </div>
-                    <div class="col-md-5">
+                    <div class="col-md-6">
                       <div class="d-flex justify-content-between">
                         <h6>Monthly Bill Saving</h6>
                         <span>£<span id="totalBillSaving">0</span></span>
@@ -818,8 +822,10 @@
                         <span>£<span id="totalPropertyValue">0</span></span>
                       </div>
                     </div>
-                    <div class="col-md-2">
-                      <h6>EPC Rating</h6>
+                  </div>
+                  <div class="row">
+                    <div class="col-md-3">
+                      <h5>EPC Rating</h5>
                       <div class="d-flex justify-content-around">
                         <div>
                           <p>Current Rating</p>
@@ -833,7 +839,7 @@
                         <div>
                           <p>Potential Rating</p>
                           <h2
-                            class="border border-3 border-success rounded-circle text-center w-75"
+                            class="border border-3 border-success rounded-circle text-center w-50"
                             id="epcRating"
                           >
                             E
@@ -894,6 +900,9 @@
       </div>
     </div>
 
+    <script>
+      page = "withoutChart";
+    </script>
     <!-- Bootstrap JS -->
     <script src="../assets/libs/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <!-- jQuery and SmartWizard JS -->
@@ -902,6 +911,7 @@
     <script src="../assets/libs/simplebar/dist/simplebar.js"></script>
     <script src="../assets/libs/jquery-smartwizard-master/dist/js/jquery.smartWizard.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
     <script src="../assets/js/custom.js"></script>
   </body>
 </html>
