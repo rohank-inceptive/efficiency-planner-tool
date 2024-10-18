@@ -379,7 +379,7 @@ $(document).ready(function () {
               x: "Current",
             },
             {
-              y: 0,
+              y: 300,
               x: "Potential",
             },
           ],
@@ -485,7 +485,7 @@ $(document).ready(function () {
               x: "Current",
             },
             {
-              y: 0,
+              y: 2,
               x: "Potential",
             },
           ],
